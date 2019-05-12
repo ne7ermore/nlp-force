@@ -1,7 +1,8 @@
+#pragma once
+
 #include <string>
 #include <unordermap>
 #include <vector>
-
 
 namespace Bkt {
     struct Node {
