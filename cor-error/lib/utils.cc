@@ -3,6 +3,7 @@
 #include <numeric>
 #include <locale.h>
 #include <complex>
+#include <algorithm>
 
 #include "utils.h"
 

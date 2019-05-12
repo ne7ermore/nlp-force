@@ -79,8 +79,7 @@ namespace Bkt {
         std::vector<std::pair<float, std::string>> items;
         std::string s;
         std::vector<std::string> v;
-        float fnum;
-        unsigned int _min = INT_MAX, _max = 0;
+        float fnum, fmin = 100000, fmax = 0.0;
 
         while(getline(fin, s)) {
             v.clear();
@@ -93,12 +92,12 @@ namespace Bkt {
             if (fnum < min_score) continue;
             items.push_back(make_pair(fnum, v[0]));
             
-            _min = _min > fnum ? fnum : _min;
-            _max = _max < fnum ? fnum : _max;
+            fmin = fmin > fnum ? fnum : fmin;
+            fmax = fmax < fnum ? fnum : fmax;
         }
 
         sort(items.begin(), items.end(), utils::pair_sort);
-        for (auto item: items) add(item.second, (item.first - _min)/_max);
+        for (auto item: items) add(item.second, (item.first - fmin)/fmax);
     }
 
     Tree::~Tree() {
