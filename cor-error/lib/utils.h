@@ -19,9 +19,11 @@ namespace Bkt {
 
         std::wstring str2wstr(std::string);
 
-        bool pair_sort(const std::);
+        bool pair_sort(const std::pair<float, std::string>&, const std::pair<float, std::string>&);
         bool is_digits(const std::string&);
 
         float std_dev(const std::vector<float>&);
+
+        void split_string(const std::string&, std::vector<std::string>&, const std::string&);
     } // namespace utils
 } // namespace Bkt
