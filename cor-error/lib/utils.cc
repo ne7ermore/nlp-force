@@ -1,7 +1,8 @@
 #include <string>
 #include <cstdio>
 #include <numeric>
-
+#include <locale.h>
+#include <complex>
 
 #include "utils.h"
 
@@ -9,10 +10,10 @@ namespace Bkt {
     namespace utils {
         std::wstring str2wstr(const std::string& s) {
             if (s.empty()) return L"";
-            size_t = len = s.size() + 1;
-            setlocale(LC_TYPE, "");
+            size_t len = s.size() + 1;
+            setlocale(LC_CTYPE, "");
             wchar_t *p = new wchar_t[len];
-            mbstowcs(p, str.c_str(), len);
+            mbstowcs(p, s.c_str(), len);
             std::wstring w_str(p);
             delete[] p;
             return w_str;
@@ -40,7 +41,7 @@ namespace Bkt {
         }
 
         bool is_digits(const std::string& s) {
-            return std::all_of(s.begin(), s.end, ::isdigit);
+            return std::all_of(s.begin(), s.end(), ::isdigit);
         }
 
         bool pair_sort(const std::pair<float, std::string>& a, const std::pair<float, std::string>& b) {
@@ -52,7 +53,7 @@ namespace Bkt {
             float std_num, mean = sum / datas.size();
             std::for_each(datas.begin(), datas.end(), [&](const int d) {
                 std_num += (d-mean)*(d-mean);
-            })
+            });
             return sqrt(std_num/(datas.size()-1));
         }
     } // namespace utils

@@ -8,14 +8,12 @@ namespace Bkt {
     namespace utils {
         class time {
             public:
-                print_time () { gettimeofday(&start, NULL); }
+                time () { gettimeofday(&start, NULL); }
                 void refresh();
                 void print();
             private:
                 struct timeval start, end;
-        }
-
-        int levenshtein_distance(std::wstring, std::wstring);
+        };
 
         std::wstring str2wstr(std::string);
 

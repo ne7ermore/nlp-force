@@ -1,27 +1,40 @@
 #include <string>
 #include <algorithm>
-#include <queque>
+#include <queue>
 #include <complex>
 #include <fstream>
 #include <cstdio>
  
-#include "bk-tree.h"
+#include "bktree.h"
 
 namespace Bkt {
+    int Tree::levenshtein_distance(std::wstring s1, std::wstring s2) {
+        int n = s1.size(), m = s2.size();
+        int dp[n + 1][m + 1], i, j;
+        for (i = 0; i <= n; i++) dp[i][0] = i;
+        for (i = 0; i <= m; i++) dp[0][i] = i;
+        for (i = 1; i <= n; i++) for (j = 1; j <= m; j++)
+        {
+            if (s1[i - 1] == s2[j - 1]) dp[i][j] = dp[i - 1][j - 1];
+            else dp[i][j] = std::min(std::min(dp[i - 1][j], dp[i - 1][j - 1]), dp[i][j - 1]) + 1;
+        }
+        return dp[n][m];        
+    }
+
     void Tree::add(std::string s, float score) {
         std::wstring ws = utils::str2wstr(s);
         
-        node *n = root;
+        Node *n = root;
         int dist;
         if (root->value.empty()) {
             root->value = ws;
             root->score = score;
         } else while (1) {
-            dist = fn(n->value, ws);
-            auto idx = n->leafs.find(d);
+            dist = levenshtein_distance(n->value, ws);
+            auto idx = n->leafs.find(dist);
             if (idx != n->leafs.end()) n = idx->second;
             else {
-                n->leafs[d] = new Node(ws, score);
+                n->leafs[dist] = new Node(ws, score);
                 break;
             }
         }
@@ -39,13 +52,14 @@ namespace Bkt {
 
         int dist, idx;
         float p1, p2 = 0;
+        Node* n;
 
         while (q.size()) {
             n = q.front();
             q.pop();
 
-            dist = fn(n->value, ws);
-            p1 = std::pow(pow_num, dist)*n->score
+            dist = levenshtein_distance(n->value, ws);
+            p1 = std::pow(pow_num, dist)*n->score;
             if (dist <= score && p2 < p1) {
                 p2 = p1;
                 result = make_pair(n->value, p2);
@@ -53,7 +67,7 @@ namespace Bkt {
 
             for (auto leaf: n->leafs) if (leaf.first >= (dist-score) && leaf.first <= (dist+score)) q.push(leaf.second);
         }
-        return result
+        return result;
     }
 
     void Tree::read_file(std::string inf) {
@@ -84,7 +98,7 @@ namespace Bkt {
         }
 
         sort(items.begin(), items.end(), utils::pair_sort);
-        for (auto item: items) add(item.second, (d.first - _min)/_max);
+        for (auto item: items) add(item.second, (item.first - _min)/_max);
     }
 
     Tree::~Tree() {
@@ -95,6 +109,6 @@ namespace Bkt {
         if (n->value.empty()) return;
 
         n->value.clear();
-        for (auto leaf: n.leafs) tree::destroy(leaf.second);
+        for (auto leaf: n->leafs) destroy(leaf.second);
     }
 } //namespace Bkt
