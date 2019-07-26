@@ -9,16 +9,19 @@
 
 namespace Bkt {
     int Tree::levenshtein_distance(std::wstring s1, std::wstring s2) {
-        int n = s1.size(), m = s2.size();
-        int dp[n + 1][m + 1], i, j;
-        for (i = 0; i <= n; i++) dp[i][0] = i;
-        for (i = 0; i <= m; i++) dp[0][i] = i;
-        for (i = 1; i <= n; i++) for (j = 1; j <= m; j++)
-        {
-            if (s1[i - 1] == s2[j - 1]) dp[i][j] = dp[i - 1][j - 1];
-            else dp[i][j] = std::min(std::min(dp[i - 1][j], dp[i - 1][j - 1]), dp[i][j - 1]) + 1;
+        int m = s1.size(), n = s2.size(), dp[m + 1], i, j, prev, tmp;
+        for (i = 0; i <= m; i++) dp[i] = i;
+        for (i = 1; i <= n; i++) {
+            prev = i-1;
+            dp[0] = i;
+            for (j = 1; j <= m; j++) {
+                tmp = dp[j];
+                if (s1[i - 1] == s2[j - 1]) dp[j] = prev;
+                else dp[j] = std::min(std::min(dp[j], prev), dp[j - 1]) + 1;
+                prev = tmp;
+            }
         }
-        return dp[n][m];        
+        return dp[m];        
     }
 
     void Tree::add(std::string s, float score) {
