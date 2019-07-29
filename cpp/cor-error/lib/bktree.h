@@ -1,36 +1,42 @@
 #pragma once
 
 #include <string>
-#include <unordered_map>
 #include <vector>
+#include <unordered_map>
 
-#include "utils.h"
-
-namespace Bkt {
-    struct Node {
-        Node() : value() {};
-        Node(std::wstring wstr, float score) : value(wstr), score(score) {};
-        float score;
-        std::wstring value;
-        std::unordered_map<int, Node *> leafs;
-    };
-
-    class Tree {
+namespace BkTree {
+    struct node {
         public:
-            Tree() : root() { root = new Node; };
-            
-            void add(std::string, float score);
-            void read_file(std::string);
+            node() : item() {};
+            node(std::wstring wstr, float hot) : item(wstr), hot(hot) {};
+            std::unordered_map<int, node *> children;
 
-            int levenshtein_distance(std::wstring, std::wstring);
-            
-            std::pair<std::wstring, float> get(std::string, int);
-            
-            ~Tree();
-            void destroy(Node *);
+            std::wstring get_item() const;
+            void set_item(std::wstring&);
+
+            float get_hot() const;
+            void set_hot(const float&);
 
         private:
-            float pow_num = 0.5, min_score = 100;
-            Node * root;
+            std::wstring item;
+            float hot;        
     };
-} //namespace Bkt
+
+    class tree {
+        public:
+            tree() : root() { root = new node; };
+            ~tree();
+            void add(std::string, float);
+            std::vector<std::pair<float, std::wstring>> search(std::string, int);
+            int levenshtein_distance(const std::string&, const std::string&);
+            int longest_common_seq(const std::string&, const std::string&);
+            
+        private:
+            struct node *root;
+            float pow_count = 0.1, threshold;
+
+            int edit_distance(const std::wstring&, const std::wstring&);
+            void destroy(node*);
+            void read_file(std::string);
+    };    
+}; // namespace BkTree
