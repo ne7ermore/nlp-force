@@ -24,4 +24,3 @@ class BloomFilter(object):
 
     def get_slots(self, url):
         return map(self.hash, zip([url] * len(self.seeds), self.seeds))
-  

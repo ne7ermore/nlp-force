@@ -6,6 +6,7 @@ digger = Digger(8, 0.8)
 digger.gCorpus("middel")
 digger.prepare("data/query")
 
+
 def digger_process(step, start):
     res = []
     try:
@@ -13,14 +14,15 @@ def digger_process(step, start):
             for que in digger.querys:
                 if digger.bf.contains(corp):
                     break
-                
+
                 if digger.similarity(que, corp):
                     res.append((corp, que))
-                    digger.bf.add(corp)   
+                    digger.bf.add(corp)
     except Exception as err:
-        print(err)       
+        print(err)
 
     return res
+
 
 def main():
     results = []
@@ -28,7 +30,8 @@ def main():
     step_len = len(digger.corps) // digger.pro_num + 1
     pool = Pool(digger.pro_num)
     for i in range(digger.pro_num):
-        results.append(pool.apply_async(digger_process, args=(step_len, step_len*i)))
+        results.append(pool.apply_async(
+            digger_process, args=(step_len, step_len*i)))
 
     pool.close()
     pool.join()
@@ -41,5 +44,6 @@ def main():
 
     print(f"time cost - {time.time()-now}")
 
+
 if __name__ == "__main__":
-    main()    
+    main()

@@ -4,6 +4,7 @@ from synonyms import Synonyms
 from bloomfilter import BloomFilter
 from util import load_corp_vec
 
+
 class Digger(object):
     def __init__(self, pro_num, ratio, jieba_path="./", lru_cap=5000):
         self.pro_num = pro_num
@@ -26,4 +27,4 @@ class Digger(object):
     def similarity(self, s1, s2):
         if self.simi.similarity(s1, s2) > self.ratio:
             return True
-        return False  
+        return False
