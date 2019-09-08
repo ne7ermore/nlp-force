@@ -26,7 +26,7 @@ class Synonyms(object):
         print(f"load vector completed, vec size - {self.weights.shape}")
 
         print("build kd tree")
-        self.kdtree = KDTree(self.weights, leaf_size=50, metric="euclidean")
+        self.kdtree = KDTree(self.weights, leaf_size=10, metric="euclidean")
 
         self.vec_len = self.weights.shape[1]
 
@@ -37,13 +37,7 @@ class Synonyms(object):
         if word in self.word2idx:
             return self.weights[self.word2idx[word]]
         else:
-            if ignore_type == "zeros":
-                return np.zeros(self.vec_len, dtype=np.float32)
-            elif ignore_type == "random":
-                return np.random.uniform(size=self.vec_len)
-            else:
-                raise ValueError(
-                    f"invalid ignore_type {ignore_type}, should be zeros or random")
+            return np.random.uniform(low=-2, high=2, size=self.vec_len)
 
     def _text2vec(self, text, ret_num=5):
         vectors = []
@@ -56,11 +50,10 @@ class Synonyms(object):
 
                 r = np.average(c, axis=0)
                 vectors.append(r)
-
-        if len(vectors):
-            return np.sum(vectors, axis=0)
-
-        return np.random.uniform(size=self.vec_len)
+            else:
+                vectors.append(np.random.uniform(
+                    low=-2, high=2, size=self.vec_len))
+        return np.sum(vectors, axis=0)
 
     def nearby(self, word, ret_num=10, ignore_type="random"):
         word = word.strip()
@@ -106,3 +99,7 @@ if __name__ == "__main__":
     simi.load_vecs(load_corp_vec, ("data/corpus", "data/vector.npy"))
     for w, score in simi.nearby("老婆"):
         print(f"{w}-{score}")
+
+    q1 = "刘德华演的电影"
+    q2 = "张学友唱的歌"
+    print(simi.similarity(q1, q2))

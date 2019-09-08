@@ -6,7 +6,7 @@ from util import sopen, uutf8, rstr
 
 
 class Jieba(object):
-    def __init__(self, default_path, HMM=True):
+    def __init__(self, default_path, HMM=False):
         self.pseg = pseg
         self.HMM = HMM
         jieba.load_userdict(os.path.join(
