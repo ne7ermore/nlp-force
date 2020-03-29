@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import lombok.Data;
 
 @Data
 public class Node {
@@ -6,7 +7,8 @@ public class Node {
     private double hot;
     private HashMap<Integer, Node> children = new HashMap<>();
 
-    public Node() {};
+    public Node() {
+    };
 
     public Node(String word, double hot) {
         this.hot = hot;
