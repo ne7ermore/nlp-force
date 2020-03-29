@@ -3,3 +3,4 @@
 .DS_Store
 *__pycache__*
 chinese_wwm_ext_L-12_H-768_A-12
+*pyc
