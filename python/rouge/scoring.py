@@ -39,3 +39,26 @@ def _lcs_table(ref, can):
             else:
                 lcs_table[i][j] = max(lcs_table[i - 1][j], lcs_table[i][j - 1])
     return lcs_table
+
+
+def _backtrack_norec(t, ref, can):
+    i, j = len(ref), len(can)
+
+    lcs = []
+    while i > 0 and j > 0:
+        if ref[i - 1] == can[j - 1]:
+            lcs.insert(0, i-1)
+            i -= 1
+            j -= 1
+        elif t[i][j - 1] > t[i - 1][j]:
+            j -= 1
+        else:
+            i -= 1
+    return lcs
+
+
+def _create_ngrams(tokens, n):
+    ngrams = collections.Counter()
+    for ngram in (tuple(tokens[i:i + n]) for i in range(len(tokens) - n + 1)):
+        ngrams[ngram] += 1
+    return ngrams
